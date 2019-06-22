@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 
+using System.Collections.Generic;
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 {
     public static class Program
@@ -41,7 +42,169 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static int[] SelectMeals(int[] protein, int[] carbs, int[] fat, string[] dietPlans)
         {
             // Add your code here.
-            throw new NotImplementedException();
+            int[] ans=new int[dietPlans.Length];
+            int[] calories=new int[protein.Length];
+            for(int i=0;i<fat.Length;i++)
+                calories[i]=5*protein[i]+5*carbs[i]+9*fat[i];
+               
+            for(int i=0;i<dietPlans.Length;i++)
+            {
+                String diet=dietPlans[i];
+                if(diet.Length==0)
+                continue;
+                 List <int> l=new List<int>();
+                List<int>l1=new List<int>();
+                for(int j=0;j<diet.Length;j++)
+                {
+                    if(diet[j]=='P')
+                    {
+                        l1=getMax(l,protein);
+                    }
+                    else if(diet[j]=='F')
+                    {
+                        l1=getMax(l,fat);
+                    }
+                    else if(diet[j]=='C')
+                    {
+                        l1=getMax(l,carbs);
+                    }
+                    else if(diet[j]=='T')
+                    {
+                        l1=getMax(l,calories);
+                    }
+                    else if(diet[j]=='f')
+                    {
+                        l1=getMin(l,fat);
+                    }
+                     else if(diet[j]=='c')
+                    {
+                        l1=getMin(l,carbs);
+                    }
+                     else if(diet[j]=='p')
+                    {
+                        l1=getMin(l,protein);
+                    }
+                     else if(diet[j]=='t')
+                    {
+                        l1=getMin(l,calories);
+                    }
+                    if(l.Count==0)
+                    {
+                        l=l1;
+                    }
+                    else if(l.Count!=0)
+                    {
+                        l=l.Intersect(l1).ToList();
+                    }
+                    
+                }
+                int min=1000;
+                foreach(var x in l)
+                {
+                    min=Math.Min(min,x);
+                }
+                ans[i]=min;
+            }
+            
+            return ans;
+             throw new NotImplementedException();
+        }
+        public static List<int> getMax(List <int> l,int[] a)
+        {
+            int max=0;
+            int index=0;
+            List<int> l1=new List<int>();
+            for(int i=0;i<a.Length;i++)
+            {
+               if(a[i]>max)
+               {
+                   if(l.Count==0)
+                    {
+                        max=a[i];
+                        index=i;
+                    }
+                   else{
+                       if(l.Contains(i)==true)
+                       {
+                           max=a[i];
+                        index=i;
+                       }
+
+                   }
+               }
+               
+            }
+            l1.Add(index);
+            for(int i=0;i<a.Length;i++)
+            {
+                if(max==a[i] && i!=index)
+                {
+                    if(l.Count==0)
+                    {
+                        l1.Add(i);
+                    }
+                   else{
+                       if(l.Contains(i)==true)
+                       {
+                           l1.Add(i);
+                       }
+
+                   }
+                }
+            }
+            
+            return l1;
+        }
+        public static List<int> getMin(List <int> l,int[] a)
+        {
+            int min=100000;
+            int index=0;
+            List<int> l1=new List<int>();
+            for(int i=0;i<a.Length;i++)
+            {
+               if(a[i]<min)
+               {
+                   if(l.Count==0)
+                    {
+                        min=a[i];
+                        index=i;
+                    }
+                   else if(l.Count!=0){
+                   if(l.Contains(i)==true)
+                       {
+                           min=a[i];
+                           index=i;
+                       }
+
+                   }
+               }
+               
+            }
+            
+            l1.Add(index);
+            for(int i=0;i<a.Length;i++)
+            {
+                if(min==a[i] && i!=index)
+                {
+                    if(l.Count==0)
+                    {
+                        l1.Add(i);
+                    }
+                   else{
+                       if(l.Contains(i)==true)
+                       {
+                           l1.Add(i);
+                       }
+
+                   }
+                }
+            }
+             
+            return l1;
         }
     }
+
+
+
+
 }
