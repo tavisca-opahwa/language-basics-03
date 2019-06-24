@@ -52,54 +52,53 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 String diet=dietPlans[i];
                 if(diet.Length==0)
                 continue;
-                 List <int> l=new List<int>();
-                List<int>l1=new List<int>();
+                 List <int> FinalList=new List<int>();
+                List<int>TempList=new List<int>();
                 for(int j=0;j<diet.Length;j++)
                 {
-                    if(diet[j]=='P')
+                    switch(diet[j])
                     {
-                        l1=getMax(l,protein);
+                    case 'P':
+                        TempList=getMax(FinalList,protein);
+                        break;
+                   case 'F':
+                        TempList=getMax(FinalList,fat);
+                        break;
+                    case 'C':
+                        TempList=getMax(FinalList,carbs);
+                        break;
+                    case 'T':
+                        TempList=getMax(FinalList,calories);
+                        break;
+                    case 'f':
+                        TempList=getMin(FinalList,fat);
+                        break;
+                     case 'c':
+                        TempList=getMin(FinalList,carbs);
+                        break;
+                     case 'p':
+                        TempList=getMin(FinalList,protein);
+                        break;
+                     case 't':
+                        TempList=getMin(FinalList,calories);
+                        break;
+                     default:
+                        Console.Write("valid case doesnot exist");
+                        break;
                     }
-                    else if(diet[j]=='F')
+                   
+                    if(FinalList.Count==0)
                     {
-                        l1=getMax(l,fat);
+                        FinalList=TempList;
                     }
-                    else if(diet[j]=='C')
+                    else
                     {
-                        l1=getMax(l,carbs);
-                    }
-                    else if(diet[j]=='T')
-                    {
-                        l1=getMax(l,calories);
-                    }
-                    else if(diet[j]=='f')
-                    {
-                        l1=getMin(l,fat);
-                    }
-                     else if(diet[j]=='c')
-                    {
-                        l1=getMin(l,carbs);
-                    }
-                     else if(diet[j]=='p')
-                    {
-                        l1=getMin(l,protein);
-                    }
-                     else if(diet[j]=='t')
-                    {
-                        l1=getMin(l,calories);
-                    }
-                    if(l.Count==0)
-                    {
-                        l=l1;
-                    }
-                    else if(l.Count!=0)
-                    {
-                        l=l.Intersect(l1).ToList();
+                        FinalList=FinalList.Intersect(TempList).ToList();
                     }
                     
                 }
-                int min=1000;
-                foreach(var x in l)
+                int min=Int32.MaxValue;
+                foreach(var x in FinalList)
                 {
                     min=Math.Min(min,x);
                 }
@@ -107,26 +106,25 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             }
             
             return ans;
-             throw new NotImplementedException();
         }
-        public static List<int> getMax(List <int> l,int[] a)
+        public static List<int> getMax(List <int> FinalList,int[] array)
         {
-            int max=0;
+            int max=Int32.MinValue;
             int index=0;
-            List<int> l1=new List<int>();
-            for(int i=0;i<a.Length;i++)
+            List<int> TempList=new List<int>();
+            for(int i=0;i<array.Length;i++)
             {
-               if(a[i]>max)
+               if(array[i]>max)
                {
-                   if(l.Count==0)
+                   if(FinalList.Count==0)
                     {
-                        max=a[i];
+                        max=array[i];
                         index=i;
                     }
                    else{
-                       if(l.Contains(i)==true)
+                       if(FinalList.Contains(i)==true)
                        {
-                           max=a[i];
+                           max=array[i];
                         index=i;
                        }
 
@@ -134,45 +132,45 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                }
                
             }
-            l1.Add(index);
-            for(int i=0;i<a.Length;i++)
+            TempList.Add(index);
+            for(int i=0;i<array.Length;i++)
             {
-                if(max==a[i] && i!=index)
+                if(max==array[i] && i!=index)
                 {
-                    if(l.Count==0)
+                    if(FinalList.Count==0)
                     {
-                        l1.Add(i);
+                        TempList.Add(i);
                     }
                    else{
-                       if(l.Contains(i)==true)
+                       if(FinalList.Contains(i)==true)
                        {
-                           l1.Add(i);
+                           TempList.Add(i);
                        }
 
                    }
                 }
             }
             
-            return l1;
+            return TempList;
         }
-        public static List<int> getMin(List <int> l,int[] a)
+         public static List<int> getMin(List <int> FinalList,int[] array)
         {
-            int min=100000;
+            int min=Int32.MaxValue;
             int index=0;
-            List<int> l1=new List<int>();
-            for(int i=0;i<a.Length;i++)
+            List<int> TempList=new List<int>();
+            for(int i=0;i<array.Length;i++)
             {
-               if(a[i]<min)
+               if(array[i]<min)
                {
-                   if(l.Count==0)
+                   if(FinalList.Count==0)
                     {
-                        min=a[i];
+                        min=array[i];
                         index=i;
                     }
-                   else if(l.Count!=0){
-                   if(l.Contains(i)==true)
+                   else{
+                       if(FinalList.Contains(i)==true)
                        {
-                           min=a[i];
+                           min=array[i];
                            index=i;
                        }
 
@@ -180,31 +178,26 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                }
                
             }
-            
-            l1.Add(index);
-            for(int i=0;i<a.Length;i++)
+            TempList.Add(index);
+            for(int i=0;i<array.Length;i++)
             {
-                if(min==a[i] && i!=index)
+                if(min==array[i] && i!=index)
                 {
-                    if(l.Count==0)
+                    if(FinalList.Count==0)
                     {
-                        l1.Add(i);
+                        TempList.Add(i);
                     }
                    else{
-                       if(l.Contains(i)==true)
+                       if(FinalList.Contains(i)==true)
                        {
-                           l1.Add(i);
+                           TempList.Add(i);
                        }
 
                    }
                 }
             }
-             
-            return l1;
+            
+            return TempList;
         }
-    }
-
-
-
-
+}
 }
